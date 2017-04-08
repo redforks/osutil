@@ -2,10 +2,13 @@
 package osutil
 
 import (
+	"bufio"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/redforks/errors"
 )
 
 // Copy src file content to dstFile, overwrite dstFile if exist,
@@ -58,4 +61,21 @@ func isDir(p string) (bool, error) {
 	}
 
 	return info.IsDir(), nil
+}
+
+// ReadAllLines read a text file to a string array, each item is a line.
+func ReadAllLines(fn string) ([]string, error) {
+	f, err := os.Open(fn)
+	if err != nil {
+		return nil, err
+	}
+	defer errors.Close(f)
+
+	var lines []string
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines, scanner.Err()
 }

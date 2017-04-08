@@ -2,10 +2,11 @@ package osutil_test
 
 import (
 	"crypto/rand"
-	. "github.com/redforks/osutil"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	. "github.com/redforks/osutil"
 
 	"github.com/redforks/testing/iotest"
 	"github.com/redforks/testing/reset"
@@ -63,6 +64,25 @@ var _ = Describe("File", func() {
 			Ω(ioutil.WriteFile(dstFile, []byte("foo"), 0600)).Should(Succeed())
 			Ω(Copy(dstFile, srcFile)).Should(Succeed())
 		})
+
+	})
+
+	It("ReadAllLines", func() {
+		fn := filepath.Join(testDir.Dir(), "lines")
+		Ω(ioutil.WriteFile(fn, []byte(`line 1
+line 2
+
+line 4
+
+`), 0660)).Should(Succeed())
+
+		Ω(ReadAllLines(fn)).Should(Equal([]string{
+			"line 1",
+			"line 2",
+			"",
+			"line 4",
+			"",
+		}))
 
 	})
 })
