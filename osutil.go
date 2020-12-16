@@ -1,5 +1,8 @@
-// Helper functions for os related operations.
+// +build linux
+
 package osutil
+
+// Helper functions for os related operations.
 
 import (
 	"io/ioutil"
@@ -9,7 +12,7 @@ import (
 	"syscall"
 )
 
-// Set process ulimit of max opened files to max online endpoints + 50,
+// SetMaxOpenFiles set process ulimit of max opened files to max online endpoints + 50,
 // if set failed, call os.Exit(-2).
 func SetMaxOpenFiles(n uint64) {
 	const msg = "Set max open files(sockets) limits to "
@@ -28,7 +31,7 @@ func SetMaxOpenFiles(n uint64) {
 	log.Print(msg, n, " okay")
 }
 
-// Set OS tcp keep alive parameters.
+// SetIpv4TCPKeepAliveParameters set OS tcp keep alive parameters.
 // idle: How many seconds to seed keep alive package after last send data
 // intvl: If not receive keep alive package response, wait how many seconds to
 // send another one (prob).
